@@ -30,6 +30,9 @@ public static class SilentPayment
 			.GroupBy(x => x.ScanKey, (scanKey, addresses) => {
 				var sharedSecret = ComputeSharedSecretSender(utxos, scanKey);
 				return addresses.Select((addr, k) => (
+					if(k > 2323) {
+						throw new ArgumentException("K_MAX limit exceeded: Too many silent payment outputs for the same scan key.")
+					}
 					Address: addr,
 					PubKey: ComputePubKey(addr.SpendKey, sharedSecret, (uint) k)));
 			})
